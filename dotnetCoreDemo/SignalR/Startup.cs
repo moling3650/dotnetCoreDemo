@@ -26,6 +26,13 @@ namespace SignalR
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddCors(options =>
+            {
+                options.AddPolicy("all", builder =>
+                {
+                    builder.SetIsOriginAllowed(origin => true).AllowCredentials().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
             services.AddSignalR();
         }
 
@@ -36,10 +43,12 @@ namespace SignalR
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<ChatHub>("/chatHub");
-            });
+
+            app.UseCors("all")
+                .UseSignalR(routes =>
+                {
+                    routes.MapHub<ChatHub>("/chatHub");
+                });
             app.UseMvc();
         }
     }
