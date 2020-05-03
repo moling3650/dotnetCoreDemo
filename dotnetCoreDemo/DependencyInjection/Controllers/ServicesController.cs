@@ -9,10 +9,13 @@ namespace DependencyInjection.Controllers
     public class ServicesController : ControllerBase
     {
         readonly IMyScopedService scoped3;
+        readonly IGenericService<IMyTransientService> generic1;
 
-        public ServicesController (IMyScopedService scoped)
+        public ServicesController (IMyScopedService scoped,
+                                   IGenericService<IMyTransientService> genericService)
         {
             scoped3 = scoped; // 通过控制器类构造函数获取服务
+            generic1 = genericService;
         }
 
         [HttpGet("lifetimes")]

@@ -36,6 +36,10 @@ namespace DependencyInjection
             services.AddTransient<IMyTransientService, MyTransientService>();
             #endregion
 
+            #region 注册泛型的服务
+            services.AddSingleton(typeof(IGenericService<>), typeof(GenericService<>));
+            #endregion
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
