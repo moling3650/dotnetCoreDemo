@@ -24,6 +24,15 @@ namespace Cors
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                // 使用options.AddDefaultPolicy相当于全局跨域，AddPolicy可以做到不同的控制器使用不同的跨域策略
+                options.AddPolicy("CorsApi", builder =>
+                {
+                    // AllowAnyOrigin不能携带身份认证信息，可以通过SetIsOriginAllowed(origin => true)来避免
+                    builder.SetIsOriginAllowed(origin => true).AllowCredentials().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -34,6 +43,7 @@ namespace Cors
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors();
 
             app.UseMvc();
         }
