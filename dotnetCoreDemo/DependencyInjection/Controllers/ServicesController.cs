@@ -8,8 +8,15 @@ namespace DependencyInjection.Controllers
     [ApiController]
     public class ServicesController : ControllerBase
     {
+        readonly IMyScopedService scoped3;
+
+        public ServicesController (IMyScopedService scoped)
+        {
+            scoped3 = scoped; // 通过控制器类构造函数获取服务
+        }
+
         [HttpGet("lifetimes")]
-        public int GetService([FromServices]IMySingletonService singleton1, // 通过参数控制器参数获取服务
+        public int GetService([FromServices]IMySingletonService singleton1, // 通过控制器参数获取服务
                               [FromServices]IMySingletonService singleton2,
                               [FromServices]IMyTransientService transient1,
                               [FromServices]IMyTransientService transient2,
@@ -24,6 +31,7 @@ namespace DependencyInjection.Controllers
 
             Console.WriteLine($"scoped1:{scoped1.GetHashCode()}");
             Console.WriteLine($"scoped2:{scoped2.GetHashCode()}");
+            Console.WriteLine($"scoped3:{scoped3.GetHashCode()}");
 
             Console.WriteLine($"========请求结束=======");
             return 1;
